@@ -6,6 +6,8 @@ import (
 	"log"
 	"net"
 
+	pb "github.com/aabdelrahim/grpc-say/api"
+	"golang.org/x/net/context"
 	"google.golang.org/grpc"
 )
 
@@ -17,7 +19,22 @@ func main() {
 	if err != nil {
 		log.Fatal("could not listen to port %d: %v", *port, err)
 	}
-	server := grpc.NewServer()
+
+	s := grpc.NewServer()
+
+	pb.RegisterTextToSpeechServer(s, server{})
+
+	err = s.Serve(listener)
+	if err != nil {
+		log.Fatal("could not serve %v", err)
+	}
+}
+
+type server struct {
+}
+
+func (server) Say(ctx context.Context, req *pb.SayRequest) (*pb.SayResponse, error) {
+	return nil, fmt.Errorf("not implemented")
 }
 
 // cmd := exec.Command("flite", os.Args[1], "-o", "output.wav")
