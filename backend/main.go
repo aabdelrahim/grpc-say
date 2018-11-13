@@ -45,7 +45,7 @@ func (server) Say(ctx context.Context, req *pb.SayRequest) (*pb.SayResponse, err
 	if err != nil {
 		return nil, fmt.Errorf("could not close temp file %s: %v", f.Name(), err)
 	}
-	cmd := exec.Command("flite", req.Text, "-o", f.Name())
+	cmd := exec.Command("flite", "-t", req.Text, "-o", f.Name())
 
 	data, err := cmd.CombinedOutput()
 	if err != nil {
